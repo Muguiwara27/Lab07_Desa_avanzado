@@ -2,9 +2,120 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:v="clr-namespace:Presentacion.Vistas"
-        Title="Sección B · CRUD de Productos" Height="600" Width="940" WindowStartupLocation="CenterScreen">
-    <TabControl Margin="8">
-        <TabItem Header="Productos"><v:ProductosView/></TabItem>
-        <TabItem Header="Resumen por categoría"><v:ResumenView/></TabItem>
-    </TabControl>
+        Title="Sistema de Gestión de Inventario · Lab CRUD en Capas" 
+        Height="720" Width="1120" 
+        MinWidth="960" MinHeight="620"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BackgroundPageBrush}">
+
+    <Window.Resources>
+        <!-- Estilo moderno para los encabezados de pestañas (TabItem) -->
+        <Style TargetType="TabItem">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource MutedTextBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Border x:Name="tabBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="0,0,0,3"
+                                Padding="{TemplateBinding Padding}"
+                                Margin="0,0,6,0"
+                                CornerRadius="4,4,0,0">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              ContentSource="Header"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="tabBorder" Property="Background" Value="#F1F5F9"/>
+                                <Setter Property="Foreground" Value="{StaticResource DarkTextBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="tabBorder" Property="Background" Value="White"/>
+                                <Setter TargetName="tabBorder" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Header superior -->
+            <RowDefinition Height="*"/>    <!-- Contenido principal -->
+            <RowDefinition Height="Auto"/> <!-- Status bar inferior -->
+        </Grid.RowDefinitions>
+
+        <!-- ENCABEZADO SUPERIOR MODERNO -->
+        <Border Grid.Row="0" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1" Padding="20,14">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Icono de la Aplicación -->
+                <Border Grid.Column="0" Width="44" Height="44" CornerRadius="10" Background="{StaticResource PrimaryBrush}" Margin="0,0,14,0">
+                    <TextBlock Text="📦" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+
+                <!-- Título y Subtítulo -->
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="Sistema de Gestión de Inventario" FontSize="18" FontWeight="Bold" Foreground="{StaticResource DarkTextBrush}"/>
+                    <TextBlock Text="Arquitectura en 4 Capas (Entidades · Datos · Negocio · Presentación WPF) · SQL Server Stored Procedures"
+                               FontSize="12" Foreground="{StaticResource MutedTextBrush}" Margin="0,2,0,0"/>
+                </StackPanel>
+
+                <!-- Insignia de Estado -->
+                <Border Grid.Column="2" VerticalAlignment="Center" Background="#ECFDF5" BorderBrush="#A7F3D0" BorderThickness="1" CornerRadius="20" Padding="12,5">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="●" Foreground="#059669" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                        <TextBlock Text="Conexión Activa" FontWeight="SemiBold" FontSize="12" Foreground="#065F46" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- PESTAÑAS PRINCIPALES -->
+        <TabControl Grid.Row="1" Margin="20,14,20,12">
+            <TabItem Header="📦 Catálogo y Gestión CRUD">
+                <v:ProductosView/>
+            </TabItem>
+            <TabItem Header="📊 Métricas y Resumen por Categoría">
+                <v:ResumenView/>
+            </TabItem>
+        </TabControl>
+
+        <!-- BARRA DE ESTADO INFERIOR -->
+        <Border Grid.Row="2" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,1,0,0" Padding="20,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Patrón Arquitectónico en Capas · Eliminación lógica mediante flags y papelera de reciclaje"
+                           FontSize="11.5" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="1" Text="Base de Datos: LabCrud · ADO.NET"
+                           FontSize="11.5" FontWeight="SemiBold" Foreground="{StaticResource MutedTextBrush}" VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
